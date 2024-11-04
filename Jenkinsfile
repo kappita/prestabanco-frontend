@@ -3,6 +3,13 @@ pipeline {
 
 
   stages {
+    stage('Checkout repository') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Mellowzhong/Tingeso_Lab1']])
+            }
+        }
+
+
     stage('Build frontend') {
             steps {
                 script {
