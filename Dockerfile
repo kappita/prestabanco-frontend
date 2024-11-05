@@ -15,5 +15,10 @@ RUN npm run build
 FROM --platform=linux/amd64 nginx:latest
 # Copiar los archivos construidos al servidor Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
+
+
 # Exponer el puerto 80
 EXPOSE 80
+
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
