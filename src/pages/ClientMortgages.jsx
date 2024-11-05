@@ -73,17 +73,13 @@ function ClientMortgages() {
           <h1>Solicitudes realizadas</h1>
           <div className="grid w-full grid-cols-2 h-[90%]">
             {mortgages.map(e => (
-              <MortgageCard type={e.loan_type.id} status={e.status.name} amount={e.financed_amount} onClick={() => showModal(e)}/>
+              <MortgageCard mortgage={e} onClick={() => showModal(e)}/>
             ))}
           </div>
         </main>
         {isModalOpen && (
         <MortgageDetailsModal
-          type={selectedMortgage.loan_type.id}
-          amount={selectedMortgage.financed_amount}
-          paymentTerm={selectedMortgage.payment_term}
-          interestRate={selectedMortgage.interest_rate * 100}
-          status={selectedMortgage.status.name}
+          mortgage={selectedMortgage}
           onClose={closeModal}
         />
       )}

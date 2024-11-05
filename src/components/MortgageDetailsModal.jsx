@@ -1,9 +1,32 @@
 import React, { useState } from 'react';
+import FileSelecter from './FileSelecter';
+import SubmitButton from './SubmitButton';
+import { addDocuments } from '../service/addDocuments';
+import useAuthStore from '../stores/authStore';
 
-const MortgageDetailsModal = ({ type, amount, paymentTerm, interestRate, status, onClose }) => {
+const MortgageDetailsModal = ({ mortgage, onClose }) => {
+  const {is_logged_in, jwt, name} = useAuthStore();
+  let formData = new FormData()
   const handleOutsideClick = (e) => {
     if (e.target.id === 'overlay') onClose();
   };
+  console.log(mortgage)
+
+  const onFileSelect = (files) => {
+    formData = new FormData();
+    files.forEach((file, index) => {
+      formData.append(`files`, file);
+    });
+  }
+  
+  const handleAddDocuments = () => {
+    addDocuments(mortgage.id, formData, jwt).then(e => {
+      alert("Documentos añadidos correctamente")
+    }).catch(e => {
+      alert("error subiendo docs")
+    })
+  }
+  
 
   return (
     <div
@@ -15,12 +38,14 @@ const MortgageDetailsModal = ({ type, amount, paymentTerm, interestRate, status,
         <button onClick={onClose} style={styles.closeButton}>✕</button>
         <h2 style={styles.header}>Estado del préstamo</h2>
         <div style={styles.content}>
-          <p><strong>Tipo de préstamo:</strong> {type}</p>
-          <p><strong>Monto solicitado:</strong> ${amount}</p>
-          <p><strong>Plazo:</strong> {paymentTerm} años</p>
-          <p><strong>Tasa de interés:</strong> {interestRate * 100}%</p>
-          <p><strong>Situación:</strong> {status}</p>
+          <p><strong>Tipo de préstamo:</strong> {mortgage.loan_type.name}</p>
+          <p><strong>Monto solicitado:</strong> ${mortgage.financed_amount}</p>
+          <p><strong>Plazo:</strong> {mortgage.payment_term} años</p>
+          <p><strong>Tasa de interés:</strong> {mortgage.interest_rate * 100}%</p>
+          <p><strong>Situación:</strong> {mortgage.status.name}</p>
         </div>
+        {mortgage.status.id == "E2" && <FileSelecter onFileSelect={onFileSelect}/>}
+        {mortgage.status.id == "E2" && <SubmitButton onClick={handleAddDocuments} text="Añadir documentos"/>}
       </div>
       
     </div>

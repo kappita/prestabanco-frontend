@@ -1,9 +1,9 @@
 import React from 'react';
 
-const MortgageCard = ({ type, amount, status, onClick }) => {
+const MortgageCard = ({ mortgage, onClick }) => {
   // Determine the color of the status dot based on the status
   const getStatusColor = () => {
-    switch (status) {
+    switch (mortgage.status.id) {
       case 'E1':
         return 'gray';
       case 'E2':
@@ -31,11 +31,11 @@ const MortgageCard = ({ type, amount, status, onClick }) => {
     <div style={styles.card} onClick={onClick}>
       <div style={styles.header}>
         <span style={styles.statusDot(getStatusColor())}></span>
-        <h2 style={styles.title}>{type}</h2>
+        <h2 style={styles.title}>{mortgage.loan_type.name}</h2>
       </div>
       <div style={styles.content}>
-        <p><strong>Monto solicitado:</strong> ${amount}</p>
-        <p><strong>Situación:</strong> {status}</p>
+        <p><strong>Monto solicitado:</strong> ${mortgage.financed_amount}</p>
+        <p><strong>Situación:</strong> {mortgage.status.name}</p>
       </div>
     </div>
   );

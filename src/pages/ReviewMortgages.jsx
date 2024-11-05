@@ -46,7 +46,7 @@ function ReviewMortgages() {
       <h1>Solicitudes que requieren revisión</h1>
       <div className="grid w-full grid-cols-2 h-[90%]">
         {mortgages.map(e => (
-          <MortgageCard type={e.loan_type.id} status={e.status.name} amount={e.financed_amount} onClick={() => showModal(e)}/>
+          <MortgageCard mortgage={e} onClick={() => showModal(e)}/>
         ))}
       </div>
       {isModalOpen && (

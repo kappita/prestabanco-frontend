@@ -17,5 +17,3 @@ FROM --platform=linux/amd64 nginx:latest
 COPY --from=build /app/dist /usr/share/nginx/html
 # Exponer el puerto 80
 EXPOSE 80
-# Comando para ejecutar Nginx en primer plano
-CMD ["nginx", "-g", "daemon off;"]
