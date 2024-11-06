@@ -24,7 +24,7 @@ function Login() {
       navigate("/dashboard")
       
     }).catch( e=> {
-      alert("el pepe" + e)
+      alert("Correo o contraseña incorrecta")
     })
   })
 

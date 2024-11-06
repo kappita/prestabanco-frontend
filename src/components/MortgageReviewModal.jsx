@@ -3,11 +3,34 @@
 import React, { useState } from 'react';
 import DocumentsReviewSection from './DocumentsReviewSection';
 import MortgageReviewSection from './MortgageReviewSection';
+import SubmitButton from './SubmitButton';
+import { approveMortgage } from '../service/approveMortgage';
+import { outgoMortgage } from '../service/OutgoMortgage';
+import useAuthStore from '../stores/authStore';
 
 const MortgageReviewModal = ({ mortgage, onClose }) => {
+  const {is_logged_in, jwt, name} = useAuthStore();
   const handleOutsideClick = (e) => {
     if (e.target.id === 'overlay') onClose();
   };
+
+  const handleApprove = () => {
+    approveMortgage(mortgage.id, jwt).then(e => {
+      alert("Préstamo aprobado correctamente")
+      onClose()
+    }).catch(e => {
+      alert("Error aprobando préstamo")
+    })
+  }
+
+  const handleOutgo = () => {
+    outgoMortgage(mortgage.id, jwt).then(e => {
+      alert("Préstamo puesto en desembolso correctamente")
+      onClose()
+    }).catch(e => {
+      alert("Error poniendo préstamo en desembolso")
+    })
+  }
   
   return (
     <div
@@ -27,6 +50,8 @@ const MortgageReviewModal = ({ mortgage, onClose }) => {
         </div>
         {mortgage.status.id == "E1" && <DocumentsReviewSection mortgage={mortgage}/>}
         {mortgage.status.id == "E3" && <MortgageReviewSection mortgage={mortgage}/>}
+        {mortgage.status.id == "E5" && <SubmitButton text="Aprobar préstamo" onClick={handleApprove}/>}
+        {mortgage.status.id == "E6" && <SubmitButton text="Desembolsar préstamo" onClick={handleOutgo}/>}
       </div>
       
     </div>

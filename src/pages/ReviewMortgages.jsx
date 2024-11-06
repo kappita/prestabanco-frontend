@@ -16,7 +16,11 @@ function ReviewMortgages() {
     setIsModalOpen(true)
   };
   
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = async () => {
+    setIsModalOpen(false)
+    const res = await getReviewableMortgages(jwt)
+    setMortgages(res)
+    };
 
   useEffect(() => {
     async function fetchData() {

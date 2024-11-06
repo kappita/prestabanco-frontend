@@ -3,6 +3,8 @@ import FileSelecter from './FileSelecter';
 import SubmitButton from './SubmitButton';
 import { addDocuments } from '../service/addDocuments';
 import useAuthStore from '../stores/authStore';
+import { cancelMortgage } from '../service/cancelMortage';
+import MortgageConditions from './MortgageConditions';
 
 const MortgageDetailsModal = ({ mortgage, onClose }) => {
   const {is_logged_in, jwt, name} = useAuthStore();
@@ -26,7 +28,14 @@ const MortgageDetailsModal = ({ mortgage, onClose }) => {
       alert("error subiendo docs")
     })
   }
-  
+
+  const handleCancelMortgage = () => {
+    cancelMortgage(mortgage.id, jwt).then( e => {
+      alert("Solicitud cancelada con éxito")
+    }).catch(e => {
+      alert("Error cancelando la solicitud")
+    })
+  }
 
   return (
     <div
@@ -35,8 +44,15 @@ const MortgageDetailsModal = ({ mortgage, onClose }) => {
       style={styles.overlay}
     >
       <div style={styles.modal}>
-        <button onClick={onClose} style={styles.closeButton}>✕</button>
-        <h2 style={styles.header}>Estado del préstamo</h2>
+        <div className='flex justify-around'>
+          <h2 style={styles.header}>Estado del préstamo</h2>
+          <div className='flex'>
+            <button onClick={handleCancelMortgage} className='bg-red-500 mx-4'>Cancelar solicitud</button>
+            <button onClick={onClose} style={styles.closeButton}>✕</button>
+          </div>
+        </div>
+        
+        
         <div style={styles.content}>
           <p><strong>Tipo de préstamo:</strong> {mortgage.loan_type.name}</p>
           <p><strong>Monto solicitado:</strong> ${mortgage.financed_amount}</p>
@@ -46,6 +62,7 @@ const MortgageDetailsModal = ({ mortgage, onClose }) => {
         </div>
         {mortgage.status.id == "E2" && <FileSelecter onFileSelect={onFileSelect}/>}
         {mortgage.status.id == "E2" && <SubmitButton onClick={handleAddDocuments} text="Añadir documentos"/>}
+        {mortgage.status.id == "E4" && <MortgageConditions mortgage={mortgage}/>}
       </div>
       
     </div>

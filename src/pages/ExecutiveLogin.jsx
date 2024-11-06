@@ -23,6 +23,8 @@ function ExecutiveLogin() {
       log_in(e.data.token, e.data.name)
       navigate("/executives/dashboard")
       console.log(e.data)
+    }).catch(e => {
+      alert("Correo o contraseña incorrecta")
     })
   })
 

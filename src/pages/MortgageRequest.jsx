@@ -50,9 +50,9 @@ function MortgageRequest() {
       financed_amount: financedAmount,
       interest_rate: interest
     }
-    console.log(body)
     postMortgage(body, formData, jwt).then(() => {
       alert("Solicitud subida con éxito")
+      navigate("/client_mortgages")
     })
   })
 
