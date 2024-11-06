@@ -52,7 +52,7 @@ function DocumentsReviewSection({mortgage, onSubmit}) {
 
   return (
     <div className="w-full h-full p-2">
-      <FilesDownloader files={mortgage.documents}></FilesDownloader>
+      
       <h1>Documentos presentes</h1>
       <div>
       {mortgage.loan_type.required_documents.map((item) => (

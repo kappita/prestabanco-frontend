@@ -7,6 +7,7 @@ import SubmitButton from './SubmitButton';
 import { approveMortgage } from '../service/approveMortgage';
 import { outgoMortgage } from '../service/OutgoMortgage';
 import useAuthStore from '../stores/authStore';
+import FilesDownloader from './FilesDownloader';
 
 const MortgageReviewModal = ({ mortgage, onClose }) => {
   const {is_logged_in, jwt, name} = useAuthStore();
@@ -42,9 +43,10 @@ const MortgageReviewModal = ({ mortgage, onClose }) => {
         <button onClick={onClose} style={styles.closeButton}>✕</button>
         <h2 style={styles.header}>Estado del préstamo</h2>
         <div style={styles.content}>
+          <FilesDownloader files={mortgage.documents}></FilesDownloader>
           <p><strong>Tipo de préstamo:</strong> {mortgage.loan_type.name}</p>
           <p><strong>Monto solicitado:</strong> ${mortgage.financed_amount}</p>
-          <p><strong>Plazo:</strong> {mortgage.paymentTerm} años</p>
+          <p><strong>Plazo:</strong> {mortgage.payment_term} años</p>
           <p><strong>Tasa de interés:</strong> {mortgage.interest_rate * 100}%</p>
           <p><strong>Situación:</strong> {mortgage.status.name}</p>
         </div>

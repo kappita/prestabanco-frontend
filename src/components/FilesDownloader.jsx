@@ -25,7 +25,7 @@ function FilesDownloader({files}) {
 
   return (<div>
     <button onClick={handleDownload} disabled={loading}>
-      {loading ? "Downloading..." : "Download Files"}
+      {loading ? "Descargando..." : "Descargar documentos"}
     </button>
   </div>)
 }
