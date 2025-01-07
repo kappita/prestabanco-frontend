@@ -2,7 +2,7 @@ import React from 'react';
 
 const TextInput = ({ label, value, onChange, placeholder }) => {
   return (
-    <div style={styles.inputContainer}>
+    <div className='w-[70%]'>
       {label && <label style={styles.label}>{label}</label>}
       <input 
         type="text" 
@@ -27,8 +27,8 @@ const styles = {
   },
   input: {
     width: '100%',
-    padding: '8px',
-    fontSize: '16px',
+    padding: '4px',
+    fontSize: '17px',
     border: '1px solid #ccc',
     borderRadius: '4px',
   }

@@ -27,7 +27,7 @@ const FileSelecter = ({ onFileSelect }) => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <p>Drag & drop files here, or click to select files</p>
+        <p>Haz click para seleccionar los archivos</p>
         <input
           type="file"
           multiple

@@ -14,20 +14,21 @@ const BirthdatePicker = ({ onDateChange }) => {
   };
 
   return (
-    <div style={styles.container}>
-      <label style={styles.label}>Seleccione su fecha de nacimiento:</label>
+    <div style={styles.container} className='w-full flex items-center'>
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}
         locale="es"
         dateFormat="dd/MM/yyyy"
+        showIcon
         showYearDropdown
         scrollableYearDropdown
         yearDropdownItemNumber={100}  // Allows scrolling through last 100 years
         placeholderText="Seleccione su fecha de nacimiento"
         maxDate={new Date()}  // Disable future dates
-        style={styles.datePicker}
-      />
+        className='w-[18em]'
+      >
+      </DatePicker>
     </div>
   );
 };

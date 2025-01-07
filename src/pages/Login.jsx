@@ -5,6 +5,8 @@ import SubmitButton from "../components/SubmitButton";
 import axios from "axios";
 import useAuthStore from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
+import PrestaBanco from "../components/PrestaBancoLogo";
+import { Link } from "react-router-dom";
 
 
 
@@ -29,26 +31,45 @@ function Login() {
   })
 
   return (
-    <div>
-      
-
-      <TextInput
-        label = "Email"
-        value = {email}
-        onChange={(e) => setEmail(e.target.value)}
+    <div className="flex h-screen w-screen">
+    <div id="content" className="w-[50%] h-full flex flex-col justify-center items-center ">
+      <PrestaBanco fontSize="2.5rem"/>
+      <div className="w-[60%] h-[40%] shadow-sm border-2 flex flex-col items-center justify-between py-10 mt-3 rounded-lg">
+        <TextInput
+          label = "Email"
+          value = {email}
+          onChange={(e) => setEmail(e.target.value)}
+          />
+        <TextInput
+          label = "Contraseña"
+          value = {password}
+          onChange={e => setPassword(e.target.value)}
         />
-      <TextInput
-        label = "Contraseña"
-        value = {password}
-        onChange={e => setPassword(e.target.value)}
-      />
-
-      <SubmitButton
-        text="Iniciar sesión"
-        onClick={submitForm}
-      />
+        <div className="w-[40%]">
+        <SubmitButton
+          text="Iniciar sesión"
+          onClick={submitForm}
+          color="#6EEB83"
+        />
+        </div>
+         <p className="text-center text-sm text-gray-600 mt-4">
+          ¿No tienes una cuenta en PrestaBanco?{" "}
+          
+        </p>
+        <Link
+            to="/register"
+            className="text-blue-500 hover:underline focus:outline-none"
+          >
+            ¡Regístrate aquí!
+          </Link>
+      </div>
+    
+    </div>
+    <div id="art">
 
     </div>
+
+  </div>
   )
 }
 

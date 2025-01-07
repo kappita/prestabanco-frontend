@@ -44,24 +44,27 @@ function ReviewMortgages() {
   };
 
 
-  return (<div>
-    <DashboardNavbar userName={name} onLogout={handleLogout} onConfig={handleConfig} />
-    <main className="h-full">
-      <h1>Solicitudes que requieren revisión</h1>
-      <div className="grid w-full grid-cols-2 h-[90%]">
-        {mortgages.map(e => (
+  return (
+  <div className="h-screen w-screen">
+  <DashboardNavbar userName={name} onLogout={handleLogout} onConfig={handleConfig} />
+  <main className="h-full w-full flex flex-col items-center">
+    <div className="w-[80%] flex justify-start">
+      <h1 className="text-3xl font-bold pb-[2rem]">Herramientas</h1>
+    </div>
+    <div className="grid grid-cols-3 grid-rows-5 shadow-lg rounded-lg p-8 w-[80%] h-[70%] gap-4">
+          {mortgages.map(e => (
           <MortgageCard mortgage={e} onClick={() => showModal(e)}/>
         ))}
-      </div>
-      {isModalOpen && (
+    </div>
+  </main>
+  {isModalOpen && (
         <MortgageReviewModal
           mortgage={selectedMortgage}
           onClose={closeModal}
         />
       )}
-    </main>
-    
-  </div>)
+</div>
+  )
 }
 
 export default ReviewMortgages;

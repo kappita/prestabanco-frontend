@@ -40,18 +40,8 @@ const MortgageReviewModal = ({ mortgage, onClose }) => {
       style={styles.overlay}
     >
       <div style={styles.modal}>
-        <button onClick={onClose} style={styles.closeButton}>✕</button>
-        <h2 style={styles.header}>Estado del préstamo</h2>
-        <div style={styles.content}>
-          <FilesDownloader files={mortgage.documents}></FilesDownloader>
-          <p><strong>Tipo de préstamo:</strong> {mortgage.loan_type.name}</p>
-          <p><strong>Monto solicitado:</strong> ${mortgage.financed_amount}</p>
-          <p><strong>Plazo:</strong> {mortgage.payment_term} años</p>
-          <p><strong>Tasa de interés:</strong> {mortgage.interest_rate * 100}%</p>
-          <p><strong>Situación:</strong> {mortgage.status.name}</p>
-        </div>
         {mortgage.status.id == "E1" && <DocumentsReviewSection mortgage={mortgage}/>}
-        {mortgage.status.id == "E3" && <MortgageReviewSection mortgage={mortgage}/>}
+        {mortgage.status.id == "E3" && <MortgageReviewSection mortgage={mortgage} onQuit={onClose}/>}
         {mortgage.status.id == "E5" && <SubmitButton text="Aprobar préstamo" onClick={handleApprove}/>}
         {mortgage.status.id == "E6" && <SubmitButton text="Desembolsar préstamo" onClick={handleOutgo}/>}
       </div>
@@ -76,11 +66,12 @@ const styles = {
   modal: {
     position: 'relative',
     display: 'flex',
-    width: '90%',
+    width: '70%',
+    height: '70%',
     padding: '20px',
     borderRadius: '8px',
     backgroundColor: '#fff',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
   },
   closeButton: {
     position: 'absolute',

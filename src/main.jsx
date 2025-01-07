@@ -14,29 +14,17 @@ import ExecutiveLogin from './pages/ExecutiveLogin.jsx';
 import ExecutiveRegister from './pages/ExecutiveRegister.jsx';
 import ExecutiveDashboard from './pages/ExecutiveDashboard.jsx';
 import ReviewMortgages from './pages/ReviewMortgages.jsx';
+import Landing from './pages/Landing.jsx';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
 ).toString();
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <div className='grid grid-cols-1'>
-        <h1 className='bg-red-500'>Hello World</h1>
-        <Link to="about">About Us</Link>
-        <Link to="login">Login</Link>
-        <Link to="register">Register</Link>
-        <Link to="dashboard">Dashboard</Link>
-        <Link to="request_mortgage">Mortgage request</Link>
-        <Link to="simulate_mortgage">Mortgage simulation</Link>
-        <Link to="executives/login">Executive login</Link>
-        <Link to="executives/register">Executive register</Link>
-        <Link to="executives/dashboard">Executive dashboard</Link>
-      </div>
-    ),
+    element: <Landing/>,
   },
   {
     path: "about",
@@ -47,7 +35,7 @@ const router = createHashRouter([
     element: <Login/>
   },
   {
-    path: "register",
+    path: "/register",
     element: <Register/>
   },
   {
@@ -85,5 +73,5 @@ const router = createHashRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
+  <RouterProvider router={router}/>
 )

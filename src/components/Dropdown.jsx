@@ -12,19 +12,21 @@ const Dropdown = ({label, elements, onSelect }) => {
 
   return (
     <div style={styles.container}>
-      <label style={styles.label}>{label}</label>
       <select 
         value={selectedCountry} 
         onChange={handleSelect} 
         style={styles.select}
       >
-        <option value="" disabled>{label}</option>
+        
+        <option value="" disabled>{label}  ▼
+        </option>
         {elements.map((val, index) => (
           <option key={index} value={val}>
             {val}
           </option>
         ))}
       </select>
+      
     </div>
   );
 };

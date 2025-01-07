@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PrestaBanco from './PrestaBancoLogo';
 
 const DashboardNavbar = ({ userName, onLogout, onConfig }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -8,7 +9,7 @@ const DashboardNavbar = ({ userName, onLogout, onConfig }) => {
 
   return (
     <nav style={styles.navbar}>
-      <div style={styles.logo}>MyApp</div>
+      <PrestaBanco fontSize='2rem' />
       <div style={styles.userSection} onBlur={closeDropdown}>
         <button style={styles.userButton} onClick={toggleDropdown}>
           Hola, {userName}!
@@ -29,8 +30,8 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '10px 20px',
-    backgroundColor: '#333',
+    padding: '10px 8rem',
+    backgroundColor: '#fff',
     color: '#fff',
   },
   logo: {

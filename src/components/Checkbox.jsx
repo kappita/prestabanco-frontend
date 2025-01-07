@@ -8,13 +8,14 @@ function Checkbox({ label, isChecked, onChange }) {
 
   return (
     <label style={{ display: 'flex', alignItems: 'center' }}>
+      {label}
       <input
         type="checkbox"
         checked={isChecked}
         onChange={handleChange}
         style={{ marginRight: '8px' }}
       />
-      {label}
+      
     </label>
   );
 }

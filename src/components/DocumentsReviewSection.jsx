@@ -52,22 +52,38 @@ function DocumentsReviewSection({mortgage, onSubmit}) {
 
   return (
     <div className="w-full h-full p-2">
-      
-      <h1>Documentos presentes</h1>
-      <div>
-      {mortgage.loan_type.required_documents.map((item) => (
-        <label key={item.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-          <input
-            type="checkbox"
-            checked={checkedItems[item.id]}
-            onChange={() => handleCheckboxChange(item.id)}
-            style={{ marginRight: '8px' }}
-          />
-          {item.name}
-        </label>
-      ))}
+      <div id="section-header" className="flex justify-between">
+        <h1 className="font-semibold text-3xl">Revisión de documentos</h1>
       </div>
-      <SubmitButton onClick={handleSubmit} text="Validar documentación"/>
+      <div className="flex flex-col justify-between h-[90%]">
+        <div id="section-body" className="flex flex-col items-center justify-center h-[80%]">
+          <h1 className="font-medium text-xl">Documentos presentes</h1>
+          <p>Confirma que los documentos necesarios estén dentro de la solicitud</p>
+          {mortgage.loan_type.required_documents.map((item) => (
+            <label key={item.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+              {item.name}
+              <input
+                type="checkbox"
+                checked={checkedItems[item.id]}
+                onChange={() => handleCheckboxChange(item.id)}
+                style={{ marginRight: '8px' }}
+                className="ml-2 text-2xl"
+              />
+            </label>
+          ))}
+        </div>
+        <div id="section-buttons">
+        <SubmitButton onClick={handleSubmit} text="Validar documentación"/>
+        </div>
+        
+      </div>
+      
+      
+      
+      <div>
+      
+      </div>
+      
     </div>
   )
 

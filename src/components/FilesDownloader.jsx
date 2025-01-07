@@ -19,13 +19,16 @@ function FilesDownloader({files}) {
       a.remove();
       window.URL.revokeObjectURL(url); // Replace with the actual file data type
     });
+    setLoading(false)
     
 
   })
 
   return (<div>
-    <button onClick={handleDownload} disabled={loading}>
+    <button onClick={handleDownload} disabled={loading} className="border-2 border-black w-[16rem] h-[3rem] rounded-lg flex justify-around items-center">
       {loading ? "Descargando..." : "Descargar documentos"}
+      <img src="https://www.svgrepo.com/show/513826/download.svg" alt="Icono de descarga" className="h-8"/>
+
     </button>
   </div>)
 }
