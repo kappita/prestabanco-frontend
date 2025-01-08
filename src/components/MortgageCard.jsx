@@ -7,13 +7,13 @@ const MortgageCard = ({ mortgage, onClick }) => {
       case 'E1':
         return 'gray';
       case 'E2':
-        return 'yellow';
+        return '#FFB800';
       case 'E3':
         return 'gray';
       case 'E4':
-        return 'yellow'
+        return '#FFB800'
       case 'E5':
-        return 'yellow'
+        return '#FFB800'
       case 'E6':
         return 'green'
       case 'E7':

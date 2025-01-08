@@ -197,7 +197,7 @@ function Register() {
 
           <div className="w-full flex flex-col items-center">
             <BirthdatePicker onDateChange={handleDate} />
-            <p className="w-[70%] h-[1rem] text-red-600">{birthDateErr}</p>
+            <p className="w-[70%] h-[1rem] text-red-600 text-center">{birthDateErr}</p>
           </div>
 
           <div className="w-[40%]">

@@ -5,50 +5,69 @@ import SubmitButton from "../components/SubmitButton";
 import axios from "axios";
 import useAuthStore from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
+import PrestaBanco from "../components/PrestaBancoLogo";
+import { Link } from "react-router-dom";
 
 function ExecutiveLogin() {
-  const {is_logged_in, jwt, name, log_in, log_out} = useAuthStore();
-  const navigate = useNavigate()
+  const { is_logged_in, jwt, name, log_in, log_out } = useAuthStore();
+  const navigate = useNavigate();
   const api_url = import.meta.env.VITE_API_URL;
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [emailErr, setEmailErr] = useState("");
+  const [password, setPassword] = useState("");
   const submitForm = useCallback(() => {
     const body = {
       email: email,
-      password: password
-    }
-    console.log(body)
-    axios.post(api_url + "/executives/login", body, {
-    }).then(e => {
-      log_in(e.data.token, e.data.name)
-      navigate("/executives/dashboard")
-      console.log(e.data)
-    }).catch(e => {
-      alert("Correo o contraseña incorrecta")
-    })
-  })
+      password: password,
+    };
+    console.log(body);
+    axios
+      .post(api_url + "/executives/login", body, {})
+      .then((e) => {
+        log_in(e.data.token, e.data.name);
+        navigate("/executives/dashboard");
+        console.log(e.data);
+      })
+      .catch((e) => {
+        alert("Correo o contraseña incorrecta");
+      });
+  });
 
   return (
-    <div>
-    
-      <TextInput
-        label = "Email"
-        value = {email}
-        onChange={(e) => setEmail(e.target.value)}
-        />
-      <TextInput
-        label = "Contraseña"
-        value = {password}
-        onChange={e => setPassword(e.target.value)}
-      />
-
-      <SubmitButton
-        text="Iniciar sesión"
-        onClick={submitForm}
-      />
-
+    <div className="flex h-screen w-screen">
+      <div
+        id="content"
+        className="w-[50%] h-full flex flex-col justify-center items-center "
+      >
+        <PrestaBanco fontSize="2.5rem" />
+        <div className="w-[60%] h-[30%] shadow-sm border-2 flex flex-col items-center justify-between py-10 mt-3 rounded-lg">
+          <div className="w-full flex flex-col items-center">
+            <TextInput
+              placeholder="Email"
+              label="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <p className="w-[70%] h-[1rem] text-red-600">{emailErr}</p>
+          </div>
+          <TextInput
+            label="Contraseña"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div className="w-[40%]">
+            <SubmitButton
+              text="Iniciar sesión"
+              onClick={submitForm}
+              color="#6EEB83"
+            />
+          </div>
+        </div>
+      </div>
+      <div id="art"></div>
     </div>
-  )
+  );
 }
 
-export default ExecutiveLogin
+export default ExecutiveLogin;

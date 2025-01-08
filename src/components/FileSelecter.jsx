@@ -36,13 +36,17 @@ const FileSelecter = ({ onFileSelect }) => {
         />
       </div>
       {selectedFiles.length > 0 && (
-        <ul style={styles.fileList}>
+        <div className='py-[1rem]'>
+          <h3 className='font-semibold'>Documentos subidos</h3>
+          <ul style={styles.fileList}>
           {selectedFiles.map((file, index) => (
             <li key={index} style={styles.fileItem}>
               {file.name}
             </li>
           ))}
         </ul>
+        </div>
+        
       )}
     </div>
   );

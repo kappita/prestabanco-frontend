@@ -6,6 +6,7 @@ import MortgageReviewModal from "./MortgageReviewModal";
 import useAuthStore from "../stores/authStore";
 import TextInput from "./TextInput";
 import FilesDownloader from "./FilesDownloader";
+import AlertModal from "./AlertModal";
 
 function MortgageReviewSection({ mortgage, onSubmit, onQuit }) {
   const { is_logged_in, jwt, name } = useAuthStore();
@@ -22,40 +23,44 @@ function MortgageReviewSection({ mortgage, onSubmit, onQuit }) {
   const [consistentSavings, setConsistentSavings] = useState(false);
   const [periodicSavings, setPeriodicSavings] = useState(false);
   const [savingsAccountLongevity, setSavingsAccountLongevity] = useState(null);
-  const [savingsAccountLongevityErr, setSavingsAccountLongevityErr] = useState("");
+  const [savingsAccountLongevityErr, setSavingsAccountLongevityErr] =
+    useState("");
   const [financiallyStable, setFinanciallyStable] = useState(false);
   const [isFormValid, setIsFormValid] = useState(true);
+
+  const [isDone, setIsDone] = useState(false)
+
 
   const numericValidation = (input) => {
     let errorMessage = "";
 
-  if (!input) {
-    errorMessage = "Este campo no puede estar vacio.";
-  } else if (!/^\d+$/.test(input)) {
-    if (isNaN(input)) {
-      errorMessage = "Este campo debe ser un número.";
-    } else if (input.includes(".")) {
-      errorMessage = "Este campo debe ser un número entero.";
-    } else if (Number(input) < 0) {
-      errorMessage = "El número no puede ser negativo.";
+    if (!input) {
+      errorMessage = "Este campo no puede estar vacio.";
+    } else if (!/^\d+$/.test(input)) {
+      if (isNaN(input)) {
+        errorMessage = "Este campo debe ser un número.";
+      } else if (input.includes(".")) {
+        errorMessage = "Este campo debe ser un número entero.";
+      } else if (Number(input) < 0) {
+        errorMessage = "El número no puede ser negativo.";
+      }
     }
-  }
 
-  return {
-    isValid: errorMessage === "",
-    error: errorMessage,
+    return {
+      isValid: errorMessage === "",
+      error: errorMessage,
+    };
   };
-  }
 
   const validateField = (input, setMessage) => {
     const validation = numericValidation(input);
     if (!validation.isValid) {
-      setMessage(validation.error)
-      return validation.isValid
+      setMessage(validation.error);
+      return validation.isValid;
     }
-    setMessage("")
-    return validation.isValid
-  }
+    setMessage("");
+    return validation.isValid;
+  };
 
   const validateAllFields = () => {
     let is_valid = true;
@@ -63,19 +68,20 @@ function MortgageReviewSection({ mortgage, onSubmit, onQuit }) {
     is_valid = validateField(monthlyDebt, setMonthlyDebtErr) && is_valid;
     is_valid = validateField(propertyValue, setPropertyValueErr) && is_valid;
     is_valid = validateField(clientBalance, setClientBalanceErr) && is_valid;
-    is_valid = validateField(savingsAccountLongevity, setSavingsAccountLongevityErr) && is_valid;
+    is_valid =
+      validateField(savingsAccountLongevity, setSavingsAccountLongevityErr) &&
+      is_valid;
     if (!is_valid) {
       setIsFormValid(false);
     }
-    
-    return is_valid;
-  }
 
+    return is_valid;
+  };
 
   const handleSubmit = useCallback(() => {
     const validation = validateAllFields();
     if (!validation) {
-      return
+      return;
     }
 
     const body = {
@@ -97,7 +103,7 @@ function MortgageReviewSection({ mortgage, onSubmit, onQuit }) {
     };
 
     evaluateMortgage(mortgage.id, body, jwt).then((e) => {
-      onSubmit(true);
+      setIsDone(true);
     });
   });
 
@@ -108,44 +114,46 @@ function MortgageReviewSection({ mortgage, onSubmit, onQuit }) {
         className="flex justify-between items-center h-[10%]"
       >
         <h1 className="font-semibold text-3xl">Evaluación financiera</h1>
-        <FilesDownloader files={mortgage.documents} />
+        {!isDone && <FilesDownloader files={mortgage.documents} />}
       </div>
-      <div className="flex flex-col justify-between h-[90%]">
+      {!isDone && <div className="flex flex-col justify-between h-[90%]">
         <div id="section-content" className="grid grid-cols-2 w-full h-[80%]">
           <div
             id="credit-evaluation"
             className="flex flex-col items-center h-full justify-between"
           >
-            
-            <h2 className="text-xl font-medium relative">Evaluación de crédito</h2>
-          
-          <div className="w-full flex flex-col items-center">
-            <TextInput
+            <h2 className="text-xl font-medium relative">
+              Evaluación de crédito
+            </h2>
+
+            <div className="w-full flex flex-col items-center">
+              <TextInput
                 label="Ingreso mensual del cliente"
                 value={clientIncome}
                 onChange={(e) => setClientIncome(e.target.value)}
               />
               <p className="w-[70%] h-[1rem] text-red-600">{clientIncomeErr}</p>
-          </div>
-            
-          <div className="w-full flex flex-col items-center">
-            <TextInput
+            </div>
+
+            <div className="w-full flex flex-col items-center">
+              <TextInput
                 label="Valor de la propiedad"
                 value={propertyValue}
                 onChange={(e) => setPropertyValue(e.target.value)}
               />
-            <p className="w-[70%] h-[1rem] text-red-600">{propertyValueErr}</p>
-          </div>
-          <div className="w-full flex flex-col items-center">
-            <TextInput
+              <p className="w-[70%] h-[1rem] text-red-600">
+                {propertyValueErr}
+              </p>
+            </div>
+            <div className="w-full flex flex-col items-center">
+              <TextInput
                 label="Deuda mensual del cliente"
                 value={monthlyDebt}
                 onChange={(e) => setMonthlyDebt(e.target.value)}
               />
-            <p className="w-[70%] h-[1rem] text-red-600">{monthlyDebtErr}</p>
-          </div>
-         
-            
+              <p className="w-[70%] h-[1rem] text-red-600">{monthlyDebtErr}</p>
+            </div>
+
             <Checkbox
               label="Tiene un historial de crédito aceptable?"
               isChecked={acceptableCreditStory}
@@ -168,18 +176,21 @@ function MortgageReviewSection({ mortgage, onSubmit, onQuit }) {
                 value={clientBalance}
                 onChange={(e) => setClientBalance(e.target.value)}
               />
-            <p className="w-[70%] h-[1rem] text-red-600">{clientBalanceErr}</p>
-          </div>
-          <div className="w-full flex flex-col items-center">
-            <TextInput
+              <p className="w-[70%] h-[1rem] text-red-600">
+                {clientBalanceErr}
+              </p>
+            </div>
+            <div className="w-full flex flex-col items-center">
+              <TextInput
                 label="Cuántos años de longevidad tiene la cuenta de ahorro?"
                 value={savingsAccountLongevity}
                 onChange={(e) => setSavingsAccountLongevity(e.target.value)}
-            />
-            <p className="w-[70%] h-[1rem] text-red-600">{savingsAccountLongevityErr}</p>
-          </div>
-            
-            
+              />
+              <p className="w-[70%] h-[1rem] text-red-600">
+                {savingsAccountLongevityErr}
+              </p>
+            </div>
+
             <Checkbox
               label="Tiene ahorros consistentes?"
               isChecked={consistentSavings}
@@ -199,16 +210,24 @@ function MortgageReviewSection({ mortgage, onSubmit, onQuit }) {
         </div>
         <div className="flex justify-center w-full">
           <div className="w-[30%]">
-            <SubmitButton onClick={onQuit} color="#FFB800" text="Volver"/>
+            <SubmitButton onClick={onQuit} color="#FFB800" text="Volver" />
           </div>
           <div className="w-[30%]">
-            <SubmitButton onClick={handleSubmit} color="#6EEB83" text="Evaluar crédito" />
+            <SubmitButton
+              onClick={handleSubmit}
+              color="#6EEB83"
+              text="Evaluar crédito"
+            />
           </div>
         </div>
-        
-      </div>
+      </div>}
+      {isDone && <div className="flex flex-col justify-between h-[90%]">
+        <div className="h-[70%] w-full flex justify-center items-center">
+          <h1>La solicitud fue evaluada con éxito</h1>
 
-      
+        </div>
+        <SubmitButton text="Continuar" onClick={onQuit} color="#6EEB83"/>
+        </div>}
     </div>
   );
 }

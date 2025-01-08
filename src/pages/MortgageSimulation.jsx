@@ -11,27 +11,35 @@ import { getSimulation } from "../service/getSimulation";
 import MortgageSimulationResponse from "../components/MortgageSimulationResponse";
 import { validateField } from "../utils/validateNumericField";
 import { useNavigate } from "react-router-dom";
+import SimulationResponseModal from "../components/SimulationResponseModal";
 
 function MortgageSimulation() {
   const { is_logged_in, jwt, name } = useAuthStore();
   const [term, setTerm] = useState("");
+  const [termErr, setTermErr] = useState("");
   const [loanTypes, setLoanTypes] = useState([]);
   const [interest, setInterest] = useState("");
   const [selectedLoan, setSelectedLoan] = useState(null);
   const [financedAmount, setFinancedAmount] = useState("");
-  const [financedAmountErr, setFinancedAmountErr] = useState("")
+  const [financedAmountErr, setFinancedAmountErr] = useState("");
   const [income, setIncome] = useState(null);
   const [incomeErr, setIncomeErr] = useState("");
   const [monthlyDebt, setMonthlyDebt] = useState(null);
-  const [monthlyDebtErr, setMonthlyDebtErr] = useState("")
+  const [monthlyDebtErr, setMonthlyDebtErr] = useState("");
   const [propertyValue, setPropertyValue] = useState(null);
-  const [propertyValueErr, setPropertyValueErr] =  useState("")
+  const [propertyValueErr, setPropertyValueErr] = useState("");
   const [simulationResut, setSimulationResult] = useState(null);
 
-  const navigate = useNavigate()
+  const [showModal, setShowModal] = useState(null);
+
+  const navigate = useNavigate();
 
   const redirectToDashboard = () => {
-    navigate("/dashboard")
+    navigate("/dashboard");
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
   }
 
   const validateAllFields = () => {
@@ -40,9 +48,15 @@ function MortgageSimulation() {
     is_valid = validateField(income, setIncomeErr) && is_valid;
     is_valid = validateField(monthlyDebt, setMonthlyDebtErr) && is_valid;
     is_valid = validateField(propertyValue, setPropertyValueErr) && is_valid;
+    if (!term) {
+      is_valid = false;
+      setTermErr("Debes seleccionar una opción");
+    } else {
+      setTermErr("");
+    }
     return is_valid;
-  }
-  
+  };
+
   const handleLoanType = (selected) => {
     const selected_loan = loanTypes.find((e) => e.name === selected);
     console.log(selected_loan);
@@ -73,7 +87,7 @@ function MortgageSimulation() {
   const handleRequest = useCallback(() => {
     const validation = validateAllFields();
     if (!validation) {
-      return
+      return;
     }
 
     const body = {
@@ -91,6 +105,7 @@ function MortgageSimulation() {
       .then((e) => {
         console.log(e);
         setSimulationResult(e);
+        setShowModal(true)
       })
       .catch((e) => {
         alert("Error simulando credito. Revise los datos");
@@ -109,6 +124,7 @@ function MortgageSimulation() {
 
   return (
     <div className="h-screen w-screen">
+      {showModal && <SimulationResponseModal result={simulationResut} onNext={closeModal}/>}
       <DashboardNavbar
         userName={name}
         onLogout={handleLogout}
@@ -116,7 +132,9 @@ function MortgageSimulation() {
       />
       <main className="h-full w-full flex flex-col items-center">
         <div className="w-[80%] flex justify-start">
-          <h1 className="text-3xl font-bold pb-[2rem]">Simulación de crédito</h1>
+          <h1 className="text-3xl font-bold pb-[2rem]">
+            Simulación de crédito
+          </h1>
         </div>
         <div className="flex flex-col items-center shadow-lg rounded-lg p-8 w-[80%] h-[70%] gap-4">
           <Dropdown
@@ -126,11 +144,15 @@ function MortgageSimulation() {
           />
           {selectedLoan && (
             <div className="flex flex-col items-center h-full w-[40%] justify-between">
-              <Dropdown
-                label="Plazo del préstamo (En años)"
-                elements={createRangeArray(1, selectedLoan.max_term, 1).map(e=> e + " año(s)")}
-                onSelect={setTerm}
-              />
+              <div className="w-full flex flex-col items-center">
+                <Dropdown
+                  label="Plazo del préstamo (En años)"
+                  elements={createRangeArray(1, selectedLoan.max_term, 1)}
+                  onSelect={setTerm}
+                />
+                <p className="w-full text-center h-[1rem] text-red-600">{termErr}</p>
+              </div>
+
               {selectedLoan && (
                 <NumberInputWithSlider
                   min={selectedLoan.min_interest_rate}
@@ -145,7 +167,9 @@ function MortgageSimulation() {
                   value={financedAmount}
                   onChange={(e) => setFinancedAmount(e.target.value)}
                 />
-                <p className="w-[70%] h-[1rem] text-red-600">{financedAmountErr}</p>
+                <p className="w-[70%] h-[1rem] text-red-600">
+                  {financedAmountErr}
+                </p>
               </div>
               <div className="w-full flex flex-col items-center">
                 <TextInput
@@ -153,7 +177,9 @@ function MortgageSimulation() {
                   value={propertyValue}
                   onChange={(e) => setPropertyValue(e.target.value)}
                 />
-                <p className="w-[70%] h-[1rem] text-red-600">{propertyValueErr}</p>
+                <p className="w-[70%] h-[1rem] text-red-600">
+                  {propertyValueErr}
+                </p>
               </div>
               <div className="w-full flex flex-col items-center">
                 <TextInput
@@ -169,22 +195,35 @@ function MortgageSimulation() {
                   value={monthlyDebt}
                   onChange={(e) => setMonthlyDebt(e.target.value)}
                 />
-                <p className="w-[70%] h-[1rem] text-red-600">{monthlyDebtErr}</p>
+                <p className="w-[70%] h-[1rem] text-red-600">
+                  {monthlyDebtErr}
+                </p>
               </div>
               <div id="buttons" className="w-[70%] flex justify-between">
-              <SubmitButton text="Volver" onClick={redirectToDashboard} color="#FFB800"/>
-              <SubmitButton text="Simular préstamo" onClick={handleRequest} color="#6EEB83"/>
+                <SubmitButton
+                  text="Volver"
+                  onClick={redirectToDashboard}
+                  color="#FFB800"
+                />
+                <SubmitButton
+                  text="Simular préstamo"
+                  onClick={handleRequest}
+                  color="#6EEB83"
+                />
               </div>
             </div>
           )}
-        <div className="w-[30%]">
-        {!selectedLoan && <SubmitButton text="Volver" onClick={redirectToDashboard} color="#FFB800"/>}
-        </div>
+          <div className="w-[30%]">
+            {!selectedLoan && (
+              <SubmitButton
+                text="Volver"
+                onClick={redirectToDashboard}
+                color="#FFB800"
+              />
+            )}
+          </div>
         </div>
       </main>
-      {simulationResut && (
-        <MortgageSimulationResponse result={simulationResut} />
-      )}
     </div>
   );
 }

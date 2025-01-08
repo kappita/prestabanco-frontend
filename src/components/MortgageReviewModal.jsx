@@ -11,9 +11,16 @@ import FilesDownloader from './FilesDownloader';
 
 const MortgageReviewModal = ({ mortgage, onClose }) => {
   const {is_logged_in, jwt, name} = useAuthStore();
+  const [isReviewing, setIsReviewing] = useState(false);
+  const [isReviewingDocuments, setIsReviewingDocuments] = useState(true);
   const handleOutsideClick = (e) => {
     if (e.target.id === 'overlay') onClose();
   };
+
+  const handlePostDocuments = () => {
+    setIsReviewing(true)
+    setIsReviewingDocuments(false)
+  }
 
   const handleApprove = () => {
     approveMortgage(mortgage.id, jwt).then(e => {
@@ -40,8 +47,8 @@ const MortgageReviewModal = ({ mortgage, onClose }) => {
       style={styles.overlay}
     >
       <div style={styles.modal}>
-        {mortgage.status.id == "E1" && <DocumentsReviewSection mortgage={mortgage}/>}
-        {mortgage.status.id == "E3" && <MortgageReviewSection mortgage={mortgage} onQuit={onClose}/>}
+        {(mortgage.status.id == "E1" && isReviewingDocuments) && <DocumentsReviewSection mortgage={mortgage} onSubmit={handlePostDocuments} onQuit={onClose}/>}
+        {(mortgage.status.id == "E3" || isReviewing) && <MortgageReviewSection mortgage={mortgage} onQuit={onClose}/>}
         {mortgage.status.id == "E5" && <SubmitButton text="Aprobar préstamo" onClick={handleApprove}/>}
         {mortgage.status.id == "E6" && <SubmitButton text="Desembolsar préstamo" onClick={handleOutgo}/>}
       </div>
@@ -66,8 +73,8 @@ const styles = {
   modal: {
     position: 'relative',
     display: 'flex',
-    width: '70%',
-    height: '70%',
+    width: '50%',
+    height: '50%',
     padding: '20px',
     borderRadius: '8px',
     backgroundColor: '#fff',

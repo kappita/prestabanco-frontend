@@ -15,14 +15,13 @@ function MortgageConditions({ mortgage }) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <h1 className="font-bold">Condiciones del préstamo</h1>
       <p>Costo total del préstamo: ${mortgage.total_cost}</p>
       <p>Comisión de administración: ${mortgage.administration_fee} al inicio del préstamo</p>
       <p>Seguro contra incendios: ${mortgage.fire_insurance_fee} mensuales</p>
       <p>Seguro de degravamen ${mortgage.credit_insurance_fee} mensuales</p>
       <p>Cuota mensual: ${mortgage.total_monthly_cost}</p>
-      <SubmitButton text="Aceptar préstamo" onClick={handleAccept}/>
     </div>
   )
 }
